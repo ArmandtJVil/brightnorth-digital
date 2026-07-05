@@ -4,6 +4,8 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/site/theme-provider";
+import { JsonLd } from "@/components/site/json-ld";
+import { ORGANIZATION_SCHEMA } from "@/lib/schema";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -80,41 +82,6 @@ export const metadata: Metadata = {
   category: "technology",
 };
 
-const orgSchema = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "BrightNorth Digital",
-  url: SITE_URL,
-  logo: `${SITE_URL}/logo.png`,
-  description:
-    "Full-service digital agency specializing in web development, AI solutions, SEO, digital marketing, branding, and automation.",
-  slogan: "Build Smarter. Market Better. Grow Faster.",
-  areaServed: "Worldwide",
-  knowsAbout: [
-    "Web Development",
-    "Search Engine Optimization",
-    "Digital Marketing",
-    "Artificial Intelligence",
-    "Business Automation",
-    "Branding",
-    "Hosting",
-    "Digital Consulting",
-  ],
-  contactPoint: {
-    "@type": "ContactPoint",
-    contactType: "sales",
-    telephone: "+1-555-0100",
-    email: "hello@brightnorthdigital.com",
-    availableLanguage: ["English"],
-  },
-  sameAs: [
-    "https://www.linkedin.com/company/brightnorth-digital",
-    "https://twitter.com/brightnorthdig",
-    "https://www.facebook.com/brightnorthdigital",
-    "https://www.instagram.com/brightnorthdigital",
-  ],
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -122,12 +89,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
-        />
-      </head>
       <body
         className={`${inter.variable} ${jakarta.variable} font-sans antialiased bg-background text-foreground`}
       >
@@ -137,6 +98,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          {/* Organization schema — injected dynamically into <head>, persists site-wide */}
+          <JsonLd id="ld-organization" schema={ORGANIZATION_SCHEMA} />
           {children}
           <Toaster />
           <SonnerToaster position="bottom-right" richColors closeButton />

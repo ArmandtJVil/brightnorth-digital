@@ -32,6 +32,8 @@ export function Services() {
               variants={staggerItem}
               className="group relative overflow-hidden rounded-3xl border border-border/60 bg-card p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-brand/40 hover:shadow-navy"
             >
+              {/* Whole-card link to detail page */}
+              <Link href={`/services/${service.slug}`} className="absolute inset-0 z-10" aria-label={`Learn more about ${service.name}`} />
               {/* Gradient glow on hover */}
               <div
                 className={cn(
@@ -66,20 +68,31 @@ export function Services() {
                   ))}
                 </ul>
 
-                <Link
-                  href="#contact"
-                  className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-brand transition-all hover:gap-2.5"
+                <span
+                  className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-brand transition-all group-hover:gap-2.5"
                 >
                   Learn more
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </span>
               </div>
 
               {/* Bottom accent line */}
-              <span className="absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-brand to-[#ffb347] transition-all duration-500 group-hover:w-full" />
+              <span className="pointer-events-none absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-brand to-[#ffb347] transition-all duration-500 group-hover:w-full" />
             </motion.article>
           ))}
         </motion.div>
+
+        <Reveal delay={0.15}>
+          <div className="mt-12 text-center">
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-2 rounded-xl border border-foreground/20 px-6 py-3 text-base font-semibold transition-colors hover:bg-accent"
+            >
+              View all services
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </Reveal>
       </div>
     </section>
   )

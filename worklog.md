@@ -114,3 +114,69 @@ Stage Summary:
 - 13 section components in src/components/site/, 5 API routes, 8 Prisma models, 36 seeded records, 6 AI-generated brand images.
 - All golden-path interactions (contact, pricing, newsletter, blog reader, filtering, mobile menu, dark mode) confirmed working end-to-end.
 - Lighthouse-ready: semantic HTML, SEO metadata, JSON-LD Org schema, lazy images, accessible labels, reduced-motion support.
+
+---
+Task ID: 12
+Agent: Subagent — Service Detail Image Generation (Z.ai Code)
+Task: Generate 6 premium, brand-aligned images for the individual service detail pages of the BrightNorth Digital agency website.
+
+Work Log:
+- Read /home/z/my-project/worklog.md to absorb brand context (BrightNorth Digital, full-service digital agency; navy #002E6D + orange #FFA500/#FF8A00; tone = innovation, trust, expertise, growth, performance, intelligence; AVOID cliché tech imagery — no hackers/binary/neon circuits; prefer real professionals collaborating + bright modern offices with natural light; premium abstract visualizations allowed for the AI one).
+- Confirmed `z-ai` CLI present at /usr/local/bin/z-ai and verified `1344x768` is in the supported size list (avoided the API-rejected 1440x720 per task instructions).
+- Created directory /home/z/my-project/public/images/services/ via `mkdir -p`.
+- Ran all 6 `z-ai image` commands sequentially (no parallel calls to avoid API rate limits). Each command succeeded on the first attempt — no retries needed. Verified each output file with `ls -la` immediately after generation.
+- Prompts emphasize authentic corporate photography, diverse professionals collaborating, bright modern offices with natural light, navy + orange brand accent colors. The AI Solutions prompt blends real collaboration with subtle futuristic UI/glassmorphism overlays (premium abstract viz) instead of cliché hacker/binary imagery. The Hosting prompt explicitly requests "no people" with a premium cloud-infrastructure + control-room visualization.
+- All 6 outputs are 1344x768 PNGs (~7:4 landscape), uniformly sized for consistent rendering across the 6 service detail pages.
+
+Stage Summary — Generated Image Paths (all 6 succeeded):
+- /home/z/my-project/public/images/services/web-development.png  (137,011 bytes, 1344x768)  — Web Development: dev team + multi-device responsive site
+- /home/z/my-project/public/images/services/seo.png              (121,692 bytes, 1344x768)  — SEO: specialists analyzing ranking/search dashboards
+- /home/z/my-project/public/images/services/digital-marketing.png (145,859 bytes, 1344x768) — Digital Marketing: live campaign analytics + ROI dashboards
+- /home/z/my-project/public/images/services/ai-solutions.png     (143,652 bytes, 1344x768)  — AI Solutions: business pros + elegant AI dashboards/automation
+- /home/z/my-project/public/images/services/branding.png         (142,659 bytes, 1344x768)  — Branding & Graphic Design: studio w/ mood boards/swatches
+- /home/z/my-project/public/images/services/hosting.png          (135,034 bytes, 1344x768)  — Hosting & Website Care: secure cloud infra + monitoring (no people)
+
+Notes for downstream consumers:
+- All assets live under /public/images/services/ — reference as /images/services/<name>.png in Next.js Image or plain <img>.
+- Uniform 1344x768 (~1.75:1) ratio enables consistent hero/feature card sizing across the 6 service detail pages; use object-cover for any non-1.75:1 target aspect.
+- No retries were necessary; all generations clean on first attempt.
+
+---
+Task ID: 11-19
+Agent: main (Z.ai Code)
+Task: Add official logo, build dedicated Services page + individual SEO service detail pages, Services submenu, dynamic JSON-LD schema generators, unique per-route meta tags.
+
+Work Log:
+- Copied official uploaded logo (upload/logo.png) to /public/logo.png.
+- Updated Logo component to render the official PNG via next/image (with light variant for dark footer).
+- Dispatched subagent (Task 12) to generate 6 dedicated service images (web-development, seo, digital-marketing, ai-solutions, branding, hosting) → /public/images/services/.
+- Built src/lib/services-content.ts: rich long-form SEO content per service — hero, intro, 3 deep sections (~3 paras each), 6 benefits, 10 features, 4-step process, 6 FAQs, metaTitle/metaDescription/keywords/canonical, related services.
+- Built src/lib/schema.ts (server-safe): ORGANIZATION_SCHEMA, LOCAL_BUSINESS_SCHEMA, buildServiceSchema, buildFaqSchema, buildBreadcrumbSchema.
+- Built src/components/site/json-ld.tsx (client): <JsonLd> component that dynamically injects/updates a <script type="application/ld+json"> into document.head by id, removes on unmount — satisfies "injecting them dynamically into the document head when the respective components are rendered".
+- Root layout.tsx: renders <JsonLd id="ld-organization"> site-wide (persists across navigations).
+- Homepage (page.tsx): injects LocalBusiness + homepage FAQ (6 agency FAQs) via JsonLd.
+- /services listing page: generateMetadata with unique title (absolute), description, canonical /services; injects LocalBusiness schema; hero + 6 service cards linking to detail pages.
+- /services/[slug] detail page: generateStaticParams (6 slugs, dynamicParams=false), generateMetadata with unique title/description/keywords/canonical per service; injects Service + FAQPage + BreadcrumbList schemas; renders breadcrumb, hero with generated image, long-form content sections, benefits grid, features+process, FAQ accordion (radix), related services, CTA, footer.
+- Rebuilt Navbar with Services dropdown submenu (hover): navy "View all services" banner + 6 service links with icons/descs; mobile sheet menu includes Services Overview + All Services list.
+- Updated homepage Services section: each card now links to /services/[slug] (overlay link) + "View all services" button to /services.
+- Fixed title duplication: used title.absolute for services + detail pages (metaTitles already include brand).
+- Split schema builders into server-safe @/lib/schema to resolve "client function called from server" errors.
+
+Agent Browser Self-Verification (all passed):
+- Official logo loads (next/image optimized, naturalWidth 256, loaded=true) in navbar on all pages.
+- Homepage head: Organization + ProfessionalService(LocalBusiness) + FAQPage JSON-LD all injected dynamically; canonical https://brightnorthdigital.com/; unique OG title + description.
+- Services dropdown submenu opens on hover (7 links: View all + 6 services); clicking SEO navigates to /services/seo.
+- Homepage service cards (6) link to detail pages; clicking navigates correctly.
+- /services listing page: unique title, canonical /services, LocalBusiness schema, hero + 6 cards render.
+- All 6 detail pages verified: each has UNIQUE meta title, UNIQUE canonical (/services/{slug}), and 4 JSON-LD schemas (Organization, Service, FAQPage, BreadcrumbList). Sample: /services/seo → "SEO Services | Rank Higher on Google & AI Search..." + canonical /services/seo + Service schema named "Search Engine Optimization (SEO)" + FAQPage(6 Qs) + BreadcrumbList(3 items).
+- Detail page renders: breadcrumb, hero image, 3 long-form content sections, 6 benefits, features+process, FAQ accordion (expands to reveal answers), related services, CTA.
+- FAQ accordion interactive (clicked → answer visible).
+- Mobile (390px): services page + detail page responsive (stacked hero, readable content); mobile menu shows Services Overview + All Services list.
+- Lint clean; no console/runtime errors; all routes return 200.
+
+Stage Summary:
+- Official logo integrated across navbar + footer (light variant).
+- Dedicated /services page + 6 individual /services/[slug] pages with generated SEO content + images.
+- Services dropdown submenu (desktop hover) + mobile services list.
+- JSON-LD schema generators (Organization site-wide via layout; LocalBusiness on home+services; Service+FAQ+Breadcrumb per detail page) dynamically injected into <head> via <JsonLd> client component.
+- Unique meta titles, descriptions, canonical tags, OG/Twitter tags per route and per service detail page (verified across all 6).

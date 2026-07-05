@@ -212,13 +212,22 @@ export const stats: Stat[] = [
 export type NavLink = { label: string; href: string };
 
 export const navLinks: NavLink[] = [
-  { label: "Services", href: "#services" },
-  { label: "Industries", href: "#industries" },
-  { label: "Process", href: "#process" },
-  { label: "Work", href: "#portfolio" },
-  { label: "AI", href: "#ai" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Blog", href: "#blog" },
+  { label: "Services", href: "/services" },
+  { label: "Industries", href: "/#industries" },
+  { label: "Process", href: "/#process" },
+  { label: "Work", href: "/#portfolio" },
+  { label: "AI", href: "/#ai" },
+  { label: "Pricing", href: "/#pricing" },
+  { label: "Blog", href: "/#blog" },
+];
+
+export const serviceNavItems: { slug: string; name: string; shortName: string; icon: LucideIcon; desc: string }[] = [
+  { slug: "web-development", name: "Web Development", shortName: "Web Development", icon: Code2, desc: "Fast, secure, conversion-focused websites." },
+  { slug: "seo", name: "Search Engine Optimization", shortName: "SEO", icon: Search, desc: "Rank higher on Google & AI search." },
+  { slug: "digital-marketing", name: "Digital Marketing", shortName: "Marketing", icon: Megaphone, desc: "Paid ads, content, email & social." },
+  { slug: "ai-solutions", name: "Artificial Intelligence Solutions", shortName: "AI Solutions", icon: BrainCircuit, desc: "Chatbots, automation & analytics." },
+  { slug: "branding", name: "Branding & Graphic Design", shortName: "Branding", icon: Palette, desc: "Logos, identity & visual systems." },
+  { slug: "hosting", name: "Hosting & Website Care", shortName: "Hosting & Care", icon: Server, desc: "Managed hosting, security & support." },
 ];
 
 export type AiCapability = {
