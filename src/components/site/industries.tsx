@@ -40,7 +40,7 @@ export function Industries() {
       {/* navy gradient backdrop */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#002e6d]/[0.04] via-transparent to-[#ff8a00]/[0.04]" />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Industries We Serve"
           title={<>Deep expertise across <span className="text-gradient-brand">17+ industries</span></>}

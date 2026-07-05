@@ -9,7 +9,7 @@ import { Reveal } from '@/components/site/reveal'
 export function CtaBand() {
   return (
     <section className="relative py-12 sm:py-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
         <Reveal>
           <div className="relative overflow-hidden rounded-[2rem] border border-white/10 shadow-navy">
             <img

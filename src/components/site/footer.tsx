@@ -46,7 +46,7 @@ export function Footer() {
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-[0.06]" />
       <div className="pointer-events-none absolute -left-32 top-0 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(255,138,0,0.18),transparent_60%)] blur-3xl" />
 
-      <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
+      <div className="relative mx-auto max-w-[1140px] px-4 py-14 sm:px-6 lg:px-8 lg:py-16">
         {/* Newsletter */}
         <div className="grid gap-8 rounded-3xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-sm sm:p-8 lg:grid-cols-2 lg:items-center">
           <div>

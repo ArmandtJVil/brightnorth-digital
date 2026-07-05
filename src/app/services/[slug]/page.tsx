@@ -87,7 +87,7 @@ export default async function ServiceDetailPage({
       <Navbar />
       <main className="flex-1">
         {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="mx-auto max-w-7xl px-4 pt-24 sm:px-6 sm:pt-28 lg:px-8">
+        <nav aria-label="Breadcrumb" className="mx-auto max-w-[1140px] px-4 pt-24 sm:px-6 sm:pt-28 lg:px-8">
           <ol className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
             <li>
               <Link href="/" className="inline-flex items-center gap-1 hover:text-foreground">
@@ -106,7 +106,7 @@ export default async function ServiceDetailPage({
           <div className="pointer-events-none absolute inset-0 -z-10">
             <div className={cn('absolute -right-32 -top-20 h-[28rem] w-[28rem] rounded-full bg-gradient-to-br opacity-10 blur-3xl', service.gradient)} />
           </div>
-          <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+          <div className="mx-auto grid max-w-[1140px] items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
             <div>
               <span className="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-brand-soft px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#7a3d00] dark:text-[#ffcf8d]">
                 <span className="h-1.5 w-1.5 rounded-full bg-brand" />
@@ -176,7 +176,7 @@ export default async function ServiceDetailPage({
 
         {/* Benefits */}
         <section className="bg-muted/30 py-16 sm:py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                 Why choose our <span className="text-gradient-brand">{service.shortName}</span>
@@ -203,7 +203,7 @@ export default async function ServiceDetailPage({
 
         {/* Features + Process */}
         <section className="py-16 sm:py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
               {/* Features */}
               <div>
@@ -276,7 +276,7 @@ export default async function ServiceDetailPage({
         {/* Related services */}
         {related.length > 0 && (
           <section className="py-16 sm:py-20">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
               <h2 className="font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
                 Related services
               </h2>

@@ -88,7 +88,7 @@ export default function ServicesPage() {
         </section>
 
         <section className="pb-20 sm:pb-28">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {serviceDetails.map((service) => (
                 <Link

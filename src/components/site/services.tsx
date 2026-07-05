@@ -12,7 +12,7 @@ export function Services() {
   return (
     <section id="services" className="relative py-20 sm:py-28">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-dots opacity-40" />
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="What We Do"
           title={<>Services engineered for <span className="text-gradient-brand">every stage of growth</span></>}

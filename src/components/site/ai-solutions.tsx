@@ -17,7 +17,7 @@ export function AiSolutions() {
       <div className="pointer-events-none absolute -left-32 top-1/4 -z-10 h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle,rgba(255,138,0,0.25),transparent_60%)] blur-3xl" />
       <div className="pointer-events-none absolute -right-32 bottom-1/4 -z-10 h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle,rgba(77,141,255,0.22),transparent_60%)] blur-3xl" />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Left: image + floating AI nodes */}
           <Reveal direction="right">

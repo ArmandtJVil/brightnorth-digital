@@ -7,7 +7,7 @@ import { SectionHeading, Reveal } from '@/components/site/reveal'
 export function Process() {
   return (
     <section id="process" className="relative py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Our Process"
           title={<>A proven 5-step path from <span className="text-gradient-brand">idea to impact</span></>}

@@ -80,7 +80,7 @@ export function Blog({ posts }: { posts: BlogPost[] }) {
 
   return (
     <section id="blog" className="relative py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Knowledge Center"
           title={<>Insights from the <span className="text-gradient-brand">BrightNorth team</span></>}

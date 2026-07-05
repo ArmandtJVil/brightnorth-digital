@@ -63,7 +63,7 @@ export function Contact() {
   return (
     <section id="contact" className="relative py-20 sm:py-28">
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-[#002e6d]/[0.03] to-transparent" />
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Get In Touch"
           title={<>Let's build your <span className="text-gradient-brand">next big thing</span></>}

@@ -149,7 +149,7 @@ export function Pricing() {
 
   return (
     <section id="pricing" className="relative py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Pricing & Plans"
           title={<>Transparent pricing, <span className="text-gradient-brand">tailored to you</span></>}

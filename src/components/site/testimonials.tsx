@@ -48,7 +48,7 @@ export function Testimonials({ testimonials }: { testimonials: Testimonial[] }) 
     <section id="testimonials" className="relative overflow-hidden py-20 sm:py-28">
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#ff8a00]/[0.04] via-transparent to-[#002e6d]/[0.04]" />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Client Success Stories"
           title={<>Partnerships that <span className="text-gradient-brand">drive real results</span></>}

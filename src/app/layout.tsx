@@ -1,20 +1,22 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Hanken_Grotesk, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/site/theme-provider";
 import { JsonLd } from "@/components/site/json-ld";
 import { ORGANIZATION_SCHEMA } from "@/lib/schema";
+import { ChatbotWidget } from "@/components/site/chatbot-widget";
 
-const inter = Inter({
-  variable: "--font-inter",
+const hanken = Hanken_Grotesk({
+  variable: "--font-body",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-display",
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
   subsets: ["latin"],
   weight: ["500", "600", "700", "800"],
   display: "swap",
@@ -88,9 +90,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body
-        className={`${inter.variable} ${jakarta.variable} font-sans antialiased bg-background text-foreground`}
+        className={`${hanken.variable} ${bricolage.variable} font-sans antialiased bg-background text-foreground`}
       >
         <ThemeProvider
           attribute="class"
@@ -101,6 +103,8 @@ export default function RootLayout({
           {/* Organization schema — injected dynamically into <head>, persists site-wide */}
           <JsonLd id="ld-organization" schema={ORGANIZATION_SCHEMA} />
           {children}
+          {/* AI chatbot — floating widget, available on every page */}
+          <ChatbotWidget />
           <Toaster />
           <SonnerToaster position="bottom-right" richColors closeButton />
         </ThemeProvider>

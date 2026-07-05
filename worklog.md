@@ -180,3 +180,29 @@ Stage Summary:
 - Services dropdown submenu (desktop hover) + mobile services list.
 - JSON-LD schema generators (Organization site-wide via layout; LocalBusiness on home+services; Service+FAQ+Breadcrumb per detail page) dynamically injected into <head> via <JsonLd> client component.
 - Unique meta titles, descriptions, canonical tags, OG/Twitter tags per route and per service detail page (verified across all 6).
+
+---
+Task ID: 20-26
+Agent: main (Z.ai Code)
+Task: Increase logo size, add AI chatbot, change content width to 1140px, switch to more characterful fonts.
+
+Work Log:
+- Fonts: Replaced Inter + Plus Jakarta Sans with Hanken Grotesk (body, warm/characterful) + Bricolage Grotesque (display, distinctive grotesque with optical sizing). Updated layout.tsx (next/font), globals.css (@theme tokens + .font-display utility + letter-spacing tuning). Fixed font variable resolution by referencing --font-bricolage/--font-body directly in the .font-display utility (Tailwind v4 @theme inline doesn't emit CSS vars).
+- Logo: Increased from h-8 sm:h-9 (~32px) to h-12 sm:h-[3.4rem] (~54px), increased intrinsic dimensions to 240x82, bumped navbar vertical padding to accommodate. Verified 54px rendered height.
+- Content width: Global replace max-w-7xl (1280px) → max-w-[1140px] across all 16 files. Verified nav inner width = 1140px.
+- AI Chatbot backend: /api/chat route using z-ai-web-dev-sdk with a detailed BrightNorth Digital system prompt (services, pricing, process, contact info, tone guidelines). Accepts conversation history (max 20 msgs), returns AI reply. Error handling + input validation (zod).
+- AI Chatbot frontend: ChatbotWidget component — floating launcher button (bottom-right, navy gradient, pulsing unread badge), opens a premium chat panel with: navy header ("North AI Assistant" + online indicator), message history (user/assistant bubbles), animated typing indicator, 4 quick-reply chips, input with send button, "Talk to a human" link to /#contact. Spring animations, auto-scroll, auto-focus.
+- Added ChatbotWidget to root layout so it appears on every page (homepage + service pages verified).
+- Fixed: added data-scroll-behavior="smooth" to <html> per Next.js 16 recommendation.
+
+Agent Browser Self-Verification (all passed):
+- Display font on h1: "Bricolage Grotesque" ✓ (distinctive, characterful)
+- Body font: "Hanken Grotesk" ✓
+- Logo height: 54px (was ~32px) ✓ — visibly larger/prominent per VLM
+- Content/nav width: 1140px ✓
+- Chatbot launcher present on homepage AND /services/seo ✓ (persists across routes)
+- Chatbot conversation: opened widget → greeting + quick replies shown → sent "How much does a website cost..." → AI replied with accurate pricing ($3,500–$100k+), timeline (4-12 weeks), and CTA to pricing calculator/strategy session ✓
+- No console/runtime errors; lint clean.
+
+Stage Summary:
+- Logo ~70% larger; content narrowed to 1140px; fonts switched to Bricolage Grotesque + Hanken Grotesk (distinctive, warm, premium); AI chatbot ("North") live on every page with real z-ai-web-dev-sdk backend, typing indicator, quick replies, and conversation memory.

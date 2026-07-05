@@ -25,11 +25,11 @@ export function Logo({ className, variant = 'default' }: { className?: string; v
       <Image
         src="/logo.png"
         alt="BrightNorth Digital logo"
-        width={160}
-        height={55}
+        width={240}
+        height={82}
         priority
         className={cn(
-          'h-8 w-auto sm:h-9',
+          'h-12 w-auto sm:h-[3.4rem]',
           variant === 'light' && 'brightness-0 invert',
         )}
       />
@@ -72,10 +72,10 @@ export function Navbar() {
     >
       <div
         className={cn(
-          'mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 transition-all duration-300 sm:px-6 lg:px-8',
+          'mx-auto flex max-w-[1140px] items-center justify-between gap-4 px-4 transition-all duration-300 sm:px-6 lg:px-8',
           scrolled
-            ? 'my-2 rounded-2xl border border-border/70 bg-background/80 py-2.5 shadow-soft backdrop-blur-xl'
-            : 'my-3 rounded-2xl border border-transparent py-3.5',
+            ? 'my-2 rounded-2xl border border-border/70 bg-background/80 py-3 shadow-soft backdrop-blur-xl'
+            : 'my-3 rounded-2xl border border-transparent py-4',
         )}
       >
         <Logo />
@@ -247,7 +247,7 @@ export function Navbar() {
             animate={{ scaleX: 1 }}
             exit={{ scaleX: 0 }}
             style={{ transformOrigin: 'left' }}
-            className="mx-auto h-[2px] max-w-7xl bg-gradient-to-r from-transparent via-brand to-transparent"
+            className="mx-auto h-[2px] max-w-[1140px] bg-gradient-to-r from-transparent via-brand to-transparent"
           />
         )}
       </AnimatePresence>

@@ -91,7 +91,7 @@ export function Hero() {
       </motion.div>
       <div className="pointer-events-none absolute inset-0 -z-10 bg-grid mask-fade-b opacity-60" />
 
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-10 lg:px-8">
+      <div className="mx-auto grid max-w-[1140px] items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-10 lg:px-8">
         {/* Left: copy */}
         <div className="relative z-10 text-center lg:text-left">
           <motion.div
@@ -277,7 +277,7 @@ export function Hero() {
       </div>
 
       {/* Stats bar */}
-      <div className="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:mt-24 lg:px-8">
+      <div className="mx-auto mt-16 max-w-[1140px] px-4 sm:px-6 lg:mt-24 lg:px-8">
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-border bg-border lg:grid-cols-4">
           {stats.map((s, i) => (
             <motion.div
