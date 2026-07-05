@@ -76,7 +76,19 @@ export async function POST(request: Request) {
   }
 
   try {
-    const zai = await ZAI.create();
+    // Initialise the ZAI SDK. Prefer explicit environment variables
+    // (production / Vercel) and fall back to the config-file loader
+    // (local dev / sandbox) if they aren't set.
+    const baseUrl = process.env.ZAI_API_BASE_URL;
+    const apiKey = process.env.ZAI_API_KEY;
+    const token = process.env.ZAI_TOKEN;
+    const chatId = process.env.ZAI_CHAT_ID;
+    const userId = process.env.ZAI_USER_ID;
+
+    const zai =
+      baseUrl && apiKey
+        ? new ZAI({ baseUrl, apiKey, token, chatId, userId })
+        : await ZAI.create();
 
     const messages = [
       { role: "assistant" as const, content: SYSTEM_PROMPT },
