@@ -15,7 +15,9 @@ const values = [
 
 export function About() {
   return (
-    <section id="about" className="relative py-20 sm:py-28">
+    <section id="about" className="relative overflow-hidden py-20 sm:py-28">
+      <div className="pointer-events-none absolute -left-20 top-1/3 -z-10 h-72 w-72 animate-float-slow rounded-full bg-[radial-gradient(circle,rgba(255,138,0,0.12),transparent_60%)] blur-2xl" />
+      <div className="pointer-events-none absolute -right-20 bottom-1/4 -z-10 h-80 w-80 animate-float rounded-full bg-[radial-gradient(circle,rgba(0,46,109,0.12),transparent_60%)] blur-2xl" />
       <div className="mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Image */}

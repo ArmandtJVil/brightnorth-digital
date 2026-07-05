@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/site/theme-provider";
 import { JsonLd } from "@/components/site/json-ld";
 import { ORGANIZATION_SCHEMA } from "@/lib/schema";
 import { ChatbotWidget } from "@/components/site/chatbot-widget";
+import { ScrollProgress } from "@/components/site/effects";
 
 const hanken = Hanken_Grotesk({
   variable: "--font-body",
@@ -102,6 +103,7 @@ export default function RootLayout({
         >
           {/* Organization schema — injected dynamically into <head>, persists site-wide */}
           <JsonLd id="ld-organization" schema={ORGANIZATION_SCHEMA} />
+          <ScrollProgress />
           {children}
           {/* AI chatbot — floating widget, available on every page */}
           <ChatbotWidget />

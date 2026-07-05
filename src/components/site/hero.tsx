@@ -19,7 +19,13 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { CountUp } from '@/components/site/reveal'
+import { Marquee } from '@/components/site/effects'
 import { stats } from '@/lib/site-data'
+
+const techStack = [
+  'React', 'Next.js', 'TypeScript', 'Node.js', 'Tailwind CSS', 'Prisma',
+  'OpenAI', 'Python', 'PostgreSQL', 'GraphQL', 'Vercel', 'Figma',
+]
 
 function FloatingCard({
   className,
@@ -286,9 +292,9 @@ export function Hero() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.08 }}
-              className="bg-background px-6 py-8 text-center"
+              className="group relative bg-background px-6 py-8 text-center transition-colors hover:bg-brand-soft/50"
             >
-              <div className="font-display text-4xl font-extrabold text-foreground sm:text-5xl">
+              <div className="font-display text-4xl font-extrabold text-foreground transition-transform duration-300 group-hover:scale-110 sm:text-5xl">
                 <CountUp
                   value={s.value}
                   suffix={s.suffix}
@@ -298,6 +304,16 @@ export function Hero() {
               <p className="mt-2 text-sm font-medium text-muted-foreground">{s.label}</p>
             </motion.div>
           ))}
+        </div>
+      </div>
+
+      {/* Tech stack marquee */}
+      <div className="mx-auto mt-10 max-w-[1140px] px-4 sm:px-6 lg:px-8">
+        <p className="text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Technologies we work with
+        </p>
+        <div className="relative mt-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
+          <Marquee items={techStack} />
         </div>
       </div>
     </section>

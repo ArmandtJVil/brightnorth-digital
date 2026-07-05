@@ -136,12 +136,12 @@ export function Portfolio({ projects }: { projects: PortfolioProject[] }) {
                       {/* Metrics */}
                       {(project.beforeMetric || project.afterMetric) && (
                         <div className="mt-4 grid grid-cols-2 gap-3">
-                          <div className="rounded-xl bg-muted/60 p-3">
-                            <p className="text-[0.62rem] font-semibold uppercase tracking-wide text-muted-foreground">Before</p>
-                            <p className="mt-0.5 font-display text-lg font-bold text-muted-foreground">{project.beforeMetric}</p>
+                          <div className="rounded-xl bg-muted/80 p-3 ring-1 ring-border/60">
+                            <p className="text-[0.62rem] font-bold uppercase tracking-wide text-muted-foreground">Before</p>
+                            <p className="mt-0.5 font-display text-lg font-bold text-foreground/70">{project.beforeMetric}</p>
                           </div>
-                          <div className="rounded-xl bg-brand-soft p-3">
-                            <p className="text-[0.62rem] font-semibold uppercase tracking-wide text-[#7a3d00] dark:text-[#ffcf8d]">After</p>
+                          <div className="rounded-xl bg-brand-soft p-3 ring-1 ring-brand/20">
+                            <p className="text-[0.62rem] font-bold uppercase tracking-wide text-[#8a4400] dark:text-[#ffd9a3]">After</p>
                             <p className="mt-0.5 font-display text-lg font-bold text-brand">{project.afterMetric}</p>
                           </div>
                         </div>

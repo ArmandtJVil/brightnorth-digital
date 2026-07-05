@@ -162,7 +162,7 @@ export function Pricing() {
             <Reveal key={tier.name} delay={i * 0.1}>
               <div
                 className={cn(
-                  'relative flex h-full flex-col rounded-3xl border p-7 transition-all',
+                  'relative flex h-full flex-col rounded-3xl border p-7 transition-all gradient-border',
                   tier.featured
                     ? 'border-brand/40 bg-card shadow-navy lg:-translate-y-3'
                     : 'border-border/60 bg-card hover:border-brand/30 hover:shadow-soft',

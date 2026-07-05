@@ -206,3 +206,30 @@ Agent Browser Self-Verification (all passed):
 
 Stage Summary:
 - Logo ~70% larger; content narrowed to 1140px; fonts switched to Bricolage Grotesque + Hanken Grotesk (distinctive, warm, premium); AI chatbot ("North") live on every page with real z-ai-web-dev-sdk backend, typing indicator, quick replies, and conversation memory.
+
+---
+Task ID: 30-33
+Agent: main (Z.ai Code)
+Task: Fix header colors on sections (contrast), remove Blog + Portfolio homepage sections, add more effects/animations.
+
+Work Log:
+- Contrast fixes: Strengthened SectionHeading eyebrow to font-bold + text-[#8a4400] (light) / text-[#ffd9a3] (dark) with border-brand/40 for stronger contrast on white backgrounds. Fixed portfolio "Before" metric box: bg-muted/80 + ring-border + text-foreground/70 (was text-muted-foreground which vanished on muted bg). Fixed "After" metric: ring-brand/20 + text-[#8a4400]/[#ffd9a3]. All headings use text-foreground (theme-aware) which adapts to both light/dark.
+- Removed homepage sections: Blog ("Insights from the BrightNorth team") and Portfolio ("Results that speak for themselves") sections both removed from /page.tsx. Simplified getData to fetch only testimonials. Cleaned unused imports (Portfolio, Blog, safeParseArray).
+- New animation utilities in globals.css: animate-aurora, animate-marquee/marquee-rev, animate-spin-slow, animate-pulse-ring, .gradient-border (animated gradient border on hover), .spotlight (radial glow follows cursor via --x/--y vars), .link-underline (animated underline), .text-shine (shimmer text). Added keyframes: bn-aurora, bn-marquee, bn-spin, bn-pulse-ring, bn-shine.
+- New effects components (src/components/site/effects.tsx): ScrollProgress (top progress bar using useScroll/useSpring), TiltCard (3D cursor-follow tilt), SpotlightCard (radial glow follows cursor), Marquee (infinite scroller).
+- Site-wide: ScrollProgress added to root layout (every page). Hero: added tech-stack Marquee ("Technologies we work with") + hover scale on stat numbers. Services cards: wrapped in SpotlightCard (cursor-follow glow). About: added floating aurora blobs. Pricing tier cards: gradient-border on hover.
+- Added data-scroll-behavior="smooth" to <html> (Next.js 16 recommendation).
+
+Agent Browser Self-Verification (all passed):
+- Blog section removed ✓, Portfolio section removed ✓ (both confirmed via DOM query).
+- ScrollProgress bar present and animates with scroll (scaleX 0.918 at 92% scroll) ✓.
+- Tech-stack Marquee visible below stats ✓.
+- SpotlightCard cursor-follow glow present on service cards ✓.
+- Contrast verified in BOTH dark and light mode across services, industries, process, AI, testimonials, pricing, contact sections — all headings/eyebrows/cards readable with no invisible text ✓.
+- Chatbot still functional after changes ✓.
+- Lint clean; no runtime page errors.
+
+Stage Summary:
+- Header colors fixed for robust contrast in both themes (stronger eyebrow, fixed portfolio metric boxes).
+- Blog + Portfolio sections removed from homepage as requested.
+- Added site-wide scroll progress bar, cursor-spotlight service cards, tech-stack marquee, animated gradient borders on pricing cards, floating aurora blobs in About, hover scale on stats, plus 6 new CSS animation utilities (aurora, marquee, spin, pulse-ring, gradient-border, spotlight, link-underline, text-shine) and reduced-motion support throughout.

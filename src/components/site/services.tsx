@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight, Check } from 'lucide-react'
 import { services } from '@/lib/site-data'
 import { Reveal, SectionHeading, staggerContainer, staggerItem } from '@/components/site/reveal'
+import { SpotlightCard } from '@/components/site/effects'
 import { cn } from '@/lib/utils'
 
 export function Services() {
@@ -30,8 +31,9 @@ export function Services() {
             <motion.article
               key={service.slug}
               variants={staggerItem}
-              className="group relative overflow-hidden rounded-3xl border border-border/60 bg-card p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-brand/40 hover:shadow-navy"
+              className="group relative"
             >
+              <SpotlightCard className="h-full rounded-3xl border border-border/60 bg-card transition-all duration-300 hover:-translate-y-1.5 hover:border-brand/40 hover:shadow-navy">
               {/* Whole-card link to detail page */}
               <Link href={`/services/${service.slug}`} className="absolute inset-0 z-10" aria-label={`Learn more about ${service.name}`} />
               {/* Gradient glow on hover */}
@@ -78,6 +80,7 @@ export function Services() {
 
               {/* Bottom accent line */}
               <span className="pointer-events-none absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-brand to-[#ffb347] transition-all duration-500 group-hover:w-full" />
+              </SpotlightCard>
             </motion.article>
           ))}
         </motion.div>
