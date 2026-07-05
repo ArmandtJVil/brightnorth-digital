@@ -260,3 +260,57 @@ Stage Summary:
 - Icons fixed — remain visible and animate on hover (named group eliminates conflict).
 - Tech-stack marquee now shows brand SVG logos instead of text.
 - All unused files removed (5 components/routes + 3 folders + next-themes package); project cleaned.
+
+---
+Task ID: 52
+Agent: Subagent — About & Blog Page Image Generation (Z.ai Code)
+Task: Generate 3 premium, brand-aligned images for the new About and Blog pages of the BrightNorth Digital agency website using `z-ai image` CLI.
+
+Work Log:
+- Read /home/z/my-project/worklog.md to absorb full brand + project context (BrightNorth Digital full-service agency; navy #002E6D + orange #FFA500/#FF8A00; tone = innovation, trust, expertise, growth, performance, intelligence; DARK-ONLY site; AVOID cliché tech imagery — no hackers/binary/neon circuits; prefer real diverse professionals collaborating in bright modern offices with natural light; navy + orange brand accents where natural).
+- Confirmed `1344x768` is the correct API-valid landscape size (multiples of 32; 1440x720 is rejected by the underlying API as documented in Task 2's notes). Used 1344x768 for ALL 3 images for consistency with the rest of the site's image set.
+- Directory /home/z/my-project/public/images/ already existed; verified no filename collisions for about-team.png, about-office.png, or blog-header.png.
+- Ran all 3 `z-ai image` commands sequentially (no parallel calls). Each succeeded on the FIRST attempt — no retries needed. Verified each output file with `ls -la` immediately after generation.
+- Prompts emphasize authentic corporate photography, real diverse professionals collaborating, bright modern offices with natural light, navy + orange brand accent colors. About-office prompt explicitly requests "no people" (workspace-only shot suitable as a section background). Blog-header prompt uses a focused editor's-desk composition with monitor + notebook + coffee + marketing/SEO books — premium scholarly atmosphere without clichéd tech imagery. Slightly moody/richer lighting appropriate for a DARK MODE site, while preserving the bright, warm, premium brand tone.
+- All 3 outputs are 1344x768 PNGs (~7:4 landscape), matching the uniform aspect ratio of the existing 12 site/service images for consistent rendering across all pages.
+
+Stage Summary — Generated Image Paths (all 3 succeeded, no retries):
+- /home/z/my-project/public/images/about-team.png    (138,661 bytes, 1344x768) — About: diverse team collaborating around a wooden table + whiteboard + analytics screen
+- /home/z/my-project/public/images/about-office.png  (172,993 bytes, 1344x768) — About: modern open-plan office interior, no people (workspace/culture shot)
+- /home/z/my-project/public/images/blog-header.png    (88,296 bytes, 1344x768) — Blog: content editor's desk with monitor, notebook, coffee, marketing/SEO books
+
+Notes for downstream consumers:
+- All assets live under /public/images/ — reference as /images/about-team.png, /images/about-office.png, /images/blog-header.png in Next.js Image or plain <img>.
+- Uniform 1344x768 (~1.75:1) ratio matches the existing image set; use object-cover for any non-1.75:1 target aspect (e.g. hero band, full-bleed header). 
+- Images are tuned for the DARK-ONLY site — richer/slightly moody lighting with navy + orange brand accents; they will sit naturally on dark backgrounds without washing out.
+
+---
+Task ID: 50-57
+Agent: main (Z.ai Code)
+Task: Create dedicated About, Contact, Blog pages with SEO content + images; bold the header button text.
+
+Work Log:
+- Bolded header button: Added font-bold to "Free Strategy Session" button in navbar (verified fontWeight 700). Updated link to /contact (dedicated page).
+- Updated navLinks: Added About (/about), Blog (/blog), Contact (/contact) routes; removed Work/AI section links.
+- Generated 3 images (subagent Task 52): about-team.png, about-office.png, blog-header.png.
+- Created /about page: hero + team image, stats bar, "Our Story" long-form content, Mission & Vision cards, 6 value cards, office image strip, 6-person team section, "Why choose us" checklist, FAQ (6 Qs). SEO: unique title/canonical/desc/OG, BreadcrumbList + FAQPage schema.
+- Created reusable ContactForm client component (extracted from homepage contact) with success animation, zod-validated API, select dropdowns for service/budget.
+- Created /contact page: hero, 4 contact info cards, contact image + live chat card, contact form (reuses ContactForm), OpenStreetMap embed, SEO long-form content, FAQ (5 Qs), CTA. SEO: unique title/canonical/desc, LocalBusiness + Breadcrumb + FAQ schema.
+- Created /blog listing page: hero + blog header image, category filter pills, featured post card, post grid (fetched from DB), SEO content section, FAQ (4 Qs). SEO: unique title/canonical/desc/OG, Breadcrumb + FAQ schema.
+- Created /blog/[slug] detail page: generateStaticParams, generateMetadata (unique per post), breadcrumb, article header (category badge, title, author, date, reading time), full article body with heading parsing, tags, back link, related posts (same category), CTA. SEO: unique title/canonical/desc/OG per post, Breadcrumb + BlogPosting schema.
+
+Agent Browser Self-Verification (all passed):
+- Header button "Free Strategy Session": fontWeight 700 (bold) ✓, links to /contact ✓.
+- Navbar links: Services, About, Industries, Process, AI, Pricing, Blog, Contact ✓.
+- /about: 200, unique title "About BrightNorth Digital | Our Story, Team & Values...", canonical /about, schemas [Organization, BreadcrumbList, FAQPage]. Hero renders with heading + team image. Mobile responsive ✓.
+- /contact: 200, unique title "Contact BrightNorth Digital | Free Strategy Session...", canonical /contact, schemas [Organization, ProfessionalService, BreadcrumbList, FAQPage]. Contact form submission works (filled form → "Thank you, Alex!" success) ✓.
+- /blog: 200, unique title "Digital Marketing, SEO, AI & Web Dev Blog...", canonical /blog, schemas [Organization, BreadcrumbList, FAQPage], 6 post cards. Hero + header image + category filters render ✓.
+- /blog/[slug]: 200, unique title per post, canonical /blog/{slug}, schemas [Organization, BreadcrumbList, BlogPosting]. Full article renders with category badge, title, author, date, reading time, body paragraphs/headings, related posts ✓.
+- No console/runtime errors; lint clean.
+
+Stage Summary:
+- 4 new pages: /about, /contact, /blog, /blog/[slug] — all with unique SEO meta, canonicals, OG tags, and JSON-LD schemas (Breadcrumb, FAQ, LocalBusiness, BlogPosting).
+- 3 new AI-generated images (about-team, about-office, blog-header).
+- Reusable ContactForm client component with success animation.
+- Header button text is now bold (font-bold / fontWeight 700).
+- Navbar updated with About, Blog, Contact links to dedicated pages.

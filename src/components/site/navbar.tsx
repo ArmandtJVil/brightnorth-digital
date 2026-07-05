@@ -154,8 +154,8 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button asChild className="hidden rounded-xl bg-brand px-5 text-brand-foreground shadow-brand hover:bg-brand/90 sm:inline-flex">
-            <Link href="/#contact">
+          <Button asChild className="hidden rounded-xl bg-brand px-5 font-bold text-brand-foreground shadow-brand hover:bg-brand/90 sm:inline-flex">
+            <Link href="/contact">
               Free Strategy Session
               <ArrowRight className="ml-1.5 h-4 w-4" />
             </Link>

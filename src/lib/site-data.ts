@@ -213,12 +213,13 @@ export type NavLink = { label: string; href: string };
 
 export const navLinks: NavLink[] = [
   { label: "Services", href: "/services" },
+  { label: "About", href: "/about" },
   { label: "Industries", href: "/#industries" },
   { label: "Process", href: "/#process" },
-  { label: "Work", href: "/#portfolio" },
   { label: "AI", href: "/#ai" },
   { label: "Pricing", href: "/#pricing" },
-  { label: "Blog", href: "/#blog" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export const serviceNavItems: { slug: string; name: string; shortName: string; icon: LucideIcon; desc: string }[] = [
