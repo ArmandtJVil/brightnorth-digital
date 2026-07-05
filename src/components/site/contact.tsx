@@ -115,19 +115,6 @@ export function Contact() {
                 ))}
               </div>
             </Reveal>
-
-            {/* Map */}
-            <Reveal delay={0.15}>
-              <div id="map" className="overflow-hidden rounded-3xl border border-border/60 shadow-soft">
-                <iframe
-                  title="BrightNorth Digital office location map"
-                  src="https://www.openstreetmap.org/export/embed.html?bbox=-122.42%2C37.76%2C-122.39%2C37.79&layer=mapnik&marker=37.7749%2C-122.4194"
-                  className="h-64 w-full border-0 grayscale-[0.2]"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-              </div>
-            </Reveal>
           </div>
 
           {/* Right: form */}
