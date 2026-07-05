@@ -3,7 +3,6 @@ import { Hanken_Grotesk, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
-import { ThemeProvider } from "@/components/site/theme-provider";
 import { JsonLd } from "@/components/site/json-ld";
 import { ORGANIZATION_SCHEMA } from "@/lib/schema";
 import { ChatbotWidget } from "@/components/site/chatbot-widget";
@@ -91,25 +90,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth" className="dark">
       <body
         className={`${hanken.variable} ${bricolage.variable} font-sans antialiased bg-background text-foreground`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {/* Organization schema — injected dynamically into <head>, persists site-wide */}
-          <JsonLd id="ld-organization" schema={ORGANIZATION_SCHEMA} />
-          <ScrollProgress />
-          {children}
-          {/* AI chatbot — floating widget, available on every page */}
-          <ChatbotWidget />
-          <Toaster />
-          <SonnerToaster position="bottom-right" richColors closeButton />
-        </ThemeProvider>
+        {/* Organization schema — injected dynamically into <head>, persists site-wide */}
+        <JsonLd id="ld-organization" schema={ORGANIZATION_SCHEMA} />
+        <ScrollProgress />
+        {children}
+        {/* AI chatbot — floating widget, available on every page */}
+        <ChatbotWidget />
+        <Toaster />
+        <SonnerToaster position="bottom-right" richColors closeButton />
       </body>
     </html>
   );

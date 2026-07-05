@@ -5,8 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
-import { Menu, X, Sun, Moon, ArrowRight, ChevronDown } from 'lucide-react'
-import { useTheme } from 'next-themes'
+import { Menu, X, ArrowRight, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Sheet,
@@ -21,7 +20,12 @@ import { cn } from '@/lib/utils'
 
 export function Logo({ className, variant = 'default' }: { className?: string; variant?: 'default' | 'light' }) {
   return (
-    <Link href="/" className={cn('flex items-center', className)} aria-label="BrightNorth Digital home">
+    <Link href="/" className={cn('group relative flex items-center', className)} aria-label="BrightNorth Digital home">
+      {/* Glow behind logo */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -inset-x-3 inset-y-0 -z-10 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(255,138,0,0.45),rgba(0,46,109,0.25)_55%,transparent_75%)] opacity-70 blur-xl transition-opacity duration-500 group-hover:opacity-100"
+      />
       <Image
         src="/logo.png"
         alt="BrightNorth Digital logo"
@@ -29,7 +33,7 @@ export function Logo({ className, variant = 'default' }: { className?: string; v
         height={82}
         priority
         className={cn(
-          'h-12 w-auto sm:h-[3.4rem]',
+          'relative h-12 w-auto drop-shadow-[0_2px_8px_rgba(255,138,0,0.15)] sm:h-[3.4rem]',
           variant === 'light' && 'brightness-0 invert',
         )}
       />
@@ -41,14 +45,11 @@ export function Navbar() {
   const [scrolled, setScrolled] = React.useState(false)
   const [open, setOpen] = React.useState(false)
   const [servicesOpen, setServicesOpen] = React.useState(false)
-  const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = React.useState(false)
   const reduce = useReducedMotion()
   const pathname = usePathname()
   const closeTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
 
   React.useEffect(() => {
-    setMounted(true)
     const onScroll = () => setScrolled(window.scrollY > 24)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -153,15 +154,6 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-            aria-label="Toggle color theme"
-          >
-            {mounted && theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </button>
-
           <Button asChild className="hidden rounded-xl bg-brand px-5 text-brand-foreground shadow-brand hover:bg-brand/90 sm:inline-flex">
             <Link href="/#contact">
               Free Strategy Session

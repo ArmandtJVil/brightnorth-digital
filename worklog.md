@@ -233,3 +233,30 @@ Stage Summary:
 - Header colors fixed for robust contrast in both themes (stronger eyebrow, fixed portfolio metric boxes).
 - Blog + Portfolio sections removed from homepage as requested.
 - Added site-wide scroll progress bar, cursor-spotlight service cards, tech-stack marquee, animated gradient borders on pricing cards, floating aurora blobs in About, hover scale on stats, plus 6 new CSS animation utilities (aurora, marquee, spin, pulse-ring, gradient-border, spotlight, link-underline, text-shine) and reduced-motion support throughout.
+
+---
+Task ID: 40-45
+Agent: main (Z.ai Code)
+Task: Fix icons-disappear-on-hover, replace marquee text with logos, remove unused files, force dark-only mode, add logo glow.
+
+Work Log:
+- Dark-only mode: Removed ThemeProvider + next-themes dependency from layout.tsx. Hardcoded className="dark" on <html>. Removed theme toggle button from navbar (+ useTheme/Sun/Moon/mounted imports). Updated sonner.tsx to theme="dark" hardcoded. Uninstalled next-themes package.
+- Logo glow: Added a radial-gradient glow span (orange→navy→transparent, blur-xl, opacity 70→100 on hover) behind the header logo, plus a subtle drop-shadow on the logo image itself.
+- Icon hover fix: Root cause was nested unnamed `group` classes (motion.article + SpotlightCard both had `group`) causing group-hover conflicts. Fixed by using a named group `group/card` on SpotlightCard and `group-hover/card:` utilities for icon scale/rotate/glow/accent-line. Explicitly set text-white on service icon SVGs so color never drops. Added z-0 to spotlight overlay so it stays behind content.
+- Marquee → logos: Created src/components/site/tech-logos.tsx with 12 hand-crafted monochrome SVG brand logos (React, Next.js, TypeScript, Node.js, Tailwind CSS, Prisma, OpenAI, Python, PostgreSQL, GraphQL, Vercel, Figma). Created LogoMarquee component in effects.tsx. Updated hero to use LogoMarquee (replaced text Marquee).
+- Removed unused files: theme-provider.tsx, portfolio.tsx, blog.tsx (homepage sections already removed), src/app/api/blog/ (routes only used by blog.tsx), examples/ folder, download/ screenshots, mini-services/ folder. Removed unused TiltCard + text Marquee exports from effects.tsx. Cleaned unused imports from navbar (useTheme, Sun, Moon).
+
+Agent Browser Self-Verification (all passed):
+- html class="dark", body bg rgb(6,13,26), no theme toggle button present ✓ (dark-only confirmed on both / and /services/seo)
+- Logo glow present: radial-gradient(rgba(255,138,0,0.45)...), opacity 0.7, blur 24px ✓ — visually confirmed warm orange halo behind logo
+- Marquee: 24 SVG logos (12 tech brands × 2) with labels (React, Next.js, TypeScript, Node.js, Tailwind CSS, Prisma, OpenAI, Python, PostgreSQL, GraphQL, Vercel, Figma) ✓ — visually confirmed brand icons scrolling
+- Icon hover: service card icons remain visible, scale up + rotate on hover (no longer disappear) ✓
+- No console/runtime errors on fresh reload; lint clean; all routes 200.
+- Removed files confirmed gone (theme-provider, portfolio, blog, api/blog, examples, mini-services).
+
+Stage Summary:
+- Site is now dark-only (no toggle, no light theme, no flash).
+- Logo has a warm orange/navy glow behind it (intensifies on hover).
+- Icons fixed — remain visible and animate on hover (named group eliminates conflict).
+- Tech-stack marquee now shows brand SVG logos instead of text.
+- All unused files removed (5 components/routes + 3 folders + next-themes package); project cleaned.

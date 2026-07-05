@@ -31,15 +31,14 @@ export function Services() {
             <motion.article
               key={service.slug}
               variants={staggerItem}
-              className="group relative"
             >
-              <SpotlightCard className="h-full rounded-3xl border border-border/60 bg-card transition-all duration-300 hover:-translate-y-1.5 hover:border-brand/40 hover:shadow-navy">
+              <SpotlightCard className="group/card h-full rounded-3xl border border-border/60 bg-card p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-brand/40 hover:shadow-navy">
               {/* Whole-card link to detail page */}
               <Link href={`/services/${service.slug}`} className="absolute inset-0 z-10" aria-label={`Learn more about ${service.name}`} />
               {/* Gradient glow on hover */}
               <div
                 className={cn(
-                  'pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-gradient-to-br opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-30',
+                  'pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-gradient-to-br opacity-0 blur-2xl transition-opacity duration-500 group-hover/card:opacity-30',
                   service.gradient,
                 )}
               />
@@ -47,11 +46,11 @@ export function Services() {
               <div className="relative">
                 <div
                   className={cn(
-                    'inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br text-white shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3',
+                    'inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br shadow-lg transition-transform duration-300 group-hover/card:scale-110 group-hover/card:rotate-3',
                     service.gradient,
                   )}
                 >
-                  <service.icon className="h-7 w-7" />
+                  <service.icon className="h-7 w-7 text-white" />
                 </div>
 
                 <h3 className="mt-5 font-display text-xl font-bold text-foreground">
@@ -71,7 +70,7 @@ export function Services() {
                 </ul>
 
                 <span
-                  className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-brand transition-all group-hover:gap-2.5"
+                  className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-brand transition-all group-hover/card:gap-2.5"
                 >
                   Learn more
                   <ArrowRight className="h-4 w-4" />
@@ -79,7 +78,7 @@ export function Services() {
               </div>
 
               {/* Bottom accent line */}
-              <span className="pointer-events-none absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-brand to-[#ffb347] transition-all duration-500 group-hover:w-full" />
+              <span className="pointer-events-none absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-brand to-[#ffb347] transition-all duration-500 group-hover/card:w-full" />
               </SpotlightCard>
             </motion.article>
           ))}
