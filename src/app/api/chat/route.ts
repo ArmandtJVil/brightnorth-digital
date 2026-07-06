@@ -1,13 +1,16 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import ZAI from "z-ai-web-dev-sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 /**
  * AI Chatbot endpoint for BrightNorth Digital.
  *
- * Uses z-ai-web-dev-sdk (server-side only) to power a conversational
+ * Uses Google Gemini (via @google/generative-ai) to power a conversational
  * assistant that helps website visitors with questions about services,
  * pricing, process, and how to get started.
+ *
+ * Requires GEMINI_API_KEY environment variable (get one free at
+ * https://aistudio.google.com/apikey).
  *
  * Conversation history is sent from the client and replayed here so the
  * model maintains context within a session.
@@ -75,63 +78,50 @@ export async function POST(request: Request) {
     );
   }
 
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey) {
+    console.error(
+      "[/api/chat] Missing GEMINI_API_KEY environment variable. " +
+        "Get a free key at https://aistudio.google.com/apikey and add it in " +
+        "Vercel → Settings → Environment Variables."
+    );
+    return NextResponse.json(
+      {
+        success: false,
+        message:
+          "The AI assistant isn't configured yet. Please set the GEMINI_API_KEY environment variable (get a free key at https://aistudio.google.com/apikey).",
+      },
+      { status: 503 }
+    );
+  }
+
   try {
-    // Initialise the ZAI SDK. Prefer explicit environment variables
-    // (production / Vercel) and fall back to the config-file loader
-    // (local dev / sandbox) if they aren't set.
-    const baseUrl = process.env.ZAI_API_BASE_URL;
-    const apiKey = process.env.ZAI_API_KEY;
-    const token = process.env.ZAI_TOKEN;
-    const chatId = process.env.ZAI_CHAT_ID;
-    const userId = process.env.ZAI_USER_ID;
-
-    let zai: InstanceType<typeof ZAI>;
-    if (baseUrl && apiKey) {
-      // Production path — env vars set (Vercel)
-      zai = new ZAI({ baseUrl, apiKey, token, chatId, userId });
-    } else {
-      // Local dev path — try the config-file loader
-      try {
-        zai = await ZAI.create();
-      } catch (cfgErr) {
-        const cfgMsg = cfgErr instanceof Error ? cfgErr.message : String(cfgErr);
-        console.error(
-          "[/api/chat] No ZAI env vars set and config file unavailable:",
-          cfgMsg
-        );
-        return NextResponse.json(
-          {
-            success: false,
-            message:
-              "The AI assistant isn't configured. Set ZAI_API_BASE_URL, ZAI_API_KEY, ZAI_TOKEN, ZAI_CHAT_ID, and ZAI_USER_ID in your environment (Vercel → Settings → Environment Variables). See the README for details.",
-            error: cfgMsg,
-          },
-          { status: 503 }
-        );
-      }
-    }
-
-    const messages = [
-      { role: "assistant" as const, content: SYSTEM_PROMPT },
-      ...parsed.data.messages.map((m) => ({
-        role: m.role as "user" | "assistant",
-        content: m.content,
-      })),
-    ];
-
-    const completion = await zai.chat.completions.create({
-      messages,
-      thinking: { type: "disabled" },
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction: SYSTEM_PROMPT,
     });
 
+    // Convert the chat history into Gemini's expected format.
+    // Gemini expects alternating user/model turns; the first turn must be a user.
+    const history = parsed.data.messages.slice(0, -1).map((m) => ({
+      role: m.role === "user" ? "user" : "model",
+      parts: [{ text: m.content }],
+    }));
+
+    const lastMessage = parsed.data.messages[parsed.data.messages.length - 1];
+
+    const chat = model.startChat({ history });
+    const result = await chat.sendMessage(lastMessage.content);
     const reply =
-      completion.choices?.[0]?.message?.content?.trim() ||
+      result.response.text()?.trim() ||
       "I'm sorry, I couldn't generate a response just now. Could you rephrase that, or feel free to contact our team directly at hello@brightnorthdigital.com.";
 
     return NextResponse.json({ success: true, reply });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    console.error("[/api/chat] Error:", message);
+    console.error("[/api/chat] Gemini error:", message);
     return NextResponse.json(
       {
         success: false,

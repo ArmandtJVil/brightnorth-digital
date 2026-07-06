@@ -41,7 +41,7 @@ The site is **dark-mode only** with a distinctive visual identity built on deep 
 | Styling          | Tailwind CSS 4 + [shadcn/ui](https://ui.shadcn.com)   |
 | Database         | Prisma ORM (PostgreSQL — Neon/Vercel Postgres recommended) |
 | Animations       | Framer Motion                                          |
-| AI               | z-ai-web-dev-sdk (LLM chatbot)                         |
+| AI               | Google Gemini (`@google/generative-ai`) — chatbot     |
 | Icons            | Lucide React + custom SVG brand logos                  |
 | Fonts            | Bricolage Grotesque (display) + Hanken Grotesk (body) |
 | Package Manager  | Bun                                                    |
@@ -360,32 +360,30 @@ DATABASE_URL="postgresql://user:password@host:5432/brightnorth?sslmode=require"
 
 A hosted PostgreSQL connection string from [Neon](https://neon.tech), [Supabase](https://supabase.com), or Vercel Postgres works for both local dev and production.
 
-### AI Chatbot (Z.ai)
+### AI Chatbot (Google Gemini)
 
-The chatbot (`/api/chat`) uses the `z-ai-web-dev-sdk`. In local development it falls back to a `.z-ai-config` file if present, but **on Vercel you must set these environment variables**:
+The chatbot (`/api/chat`) uses Google Gemini via the `@google/generative-ai` SDK with the `gemini-1.5-flash` model. It requires a single environment variable:
 
 ```env
-ZAI_API_BASE_URL="https://internal-api.z.ai/v1"
-ZAI_API_KEY="your-z-ai-api-key"
-ZAI_TOKEN="your-z-ai-auth-token"
-ZAI_CHAT_ID="your-z-ai-chat-id"
-ZAI_USER_ID="your-z-ai-user-id"
+GEMINI_API_KEY="your-gemini-api-key"
 ```
 
-Obtain these by creating an account at [z.ai](https://z.ai) and copying your credentials from the developer dashboard. Only `ZAI_API_BASE_URL` and `ZAI_API_KEY` are strictly required by the code, but all five are sent in every request — set all of them for reliable authentication.
+**Get a free API key:**
+1. Go to [Google AI Studio](https://aistudio.google.com/apikey)
+2. Sign in with a Google account
+3. Click **"Create API key"**
+4. Copy the key and add it as `GEMINI_API_KEY` in your `.env` (local) and in Vercel → Settings → Environment Variables (production)
+
+The free tier includes generous usage (15 requests/minute, 1,500/day) which is plenty for a website chatbot.
 
 ### Summary table
 
-| Variable             | Required | Description                                  |
-| -------------------- | -------- | -------------------------------------------- |
-| `DATABASE_URL`       | ✅ Yes   | PostgreSQL connection string (Prisma)        |
-| `ZAI_API_BASE_URL`   | ✅ Yes   | Z.ai API endpoint (`https://internal-api.z.ai/v1`) |
-| `ZAI_API_KEY`        | ✅ Yes   | Your Z.ai API key                            |
-| `ZAI_TOKEN`          | ✅ Yes   | Your Z.ai auth token (JWT)                   |
-| `ZAI_CHAT_ID`        | Optional | Your Z.ai chat session ID                    |
-| `ZAI_USER_ID`        | Optional | Your Z.ai user ID                            |
+| Variable          | Required | Description                                  |
+| ----------------- | -------- | -------------------------------------------- |
+| `DATABASE_URL`    | ✅ Yes   | PostgreSQL connection string (Prisma)        |
+| `GEMINI_API_KEY`  | ✅ Yes   | Google Gemini API key (free at aistudio.google.com) |
 
-> **Note:** The `.env` file is gitignored and never committed. The `.z-ai-config` file (if used locally) is also gitignored.
+> **Note:** The `.env` file is gitignored and never committed.
 
 ## Deployment
 
@@ -395,7 +393,7 @@ Obtain these by creating an account at [z.ai](https://z.ai) and copying your cre
 2. **Import** the project at [vercel.com/new](https://vercel.com/new)
 3. **Add environment variables** in Vercel → Settings → Environment Variables:
    - `DATABASE_URL` — your hosted PostgreSQL connection string
-   - `ZAI_API_BASE_URL`, `ZAI_API_KEY`, `ZAI_TOKEN`, `ZAI_CHAT_ID`, `ZAI_USER_ID` — your Z.ai credentials
+   - `GEMINI_API_KEY` — your free Google Gemini API key (from [aistudio.google.com/apikey](https://aistudio.google.com/apikey))
 4. **Create the database schema & seed it** — run these locally with your production `DATABASE_URL` in `.env`:
    ```bash
    bun run db:push          # Creates all tables in PostgreSQL
@@ -414,7 +412,7 @@ bun run build
 bun run start
 ```
 
-Ensure `DATABASE_URL` and the `ZAI_*` variables are set in your hosting provider's environment.
+Ensure `DATABASE_URL` and `GEMINI_API_KEY` are set in your hosting provider's environment.
 
 ## Brand Identity
 
