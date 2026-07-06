@@ -39,7 +39,7 @@ The site is **dark-mode only** with a distinctive visual identity built on deep 
 | Framework        | [Next.js 16](https://nextjs.org) (App Router)          |
 | Language         | TypeScript 5                                           |
 | Styling          | Tailwind CSS 4 + [shadcn/ui](https://ui.shadcn.com)   |
-| Database         | Prisma ORM (SQLite)                                    |
+| Database         | Prisma ORM (PostgreSQL — Neon/Vercel Postgres recommended) |
 | Animations       | Framer Motion                                          |
 | AI               | z-ai-web-dev-sdk (LLM chatbot)                         |
 | Icons            | Lucide React + custom SVG brand logos                  |
@@ -82,7 +82,7 @@ The site is **dark-mode only** with a distinctive visual identity built on deep 
 
 ### Backend & Data
 
-- **Prisma + SQLite** with 8 models: ContactSubmission, NewsletterSubscriber, PricingRequest, BlogPost, PortfolioProject, Testimonial, Service, Industry.
+- **Prisma + PostgreSQL** with 8 models: ContactSubmission, NewsletterSubscriber, PricingRequest, BlogPost, PortfolioProject, Testimonial, Service, Industry.
 - **5 API routes** with Zod validation and error handling.
 - **Seed script** populating services, industries, testimonials, portfolio projects, and blog posts.
 
@@ -171,7 +171,8 @@ brightnorth-digital/
 ### Prerequisites
 
 - [Node.js](https://nodejs.org) 18+ or [Bun](https://bun.sh) 1.0+
-- A Google Fonts-capable environment (Next.js handles this automatically)
+- A **PostgreSQL** database (local, or hosted on [Neon](https://neon.tech), [Supabase](https://supabase.com), or Vercel Postgres)
+- A Z.ai account for the AI chatbot (see [Environment Variables](#environment-variables))
 
 ### Installation
 
@@ -188,17 +189,26 @@ npm install
 
 ### Set up the database
 
-```bash
-# Create the .env file
-echo 'DATABASE_URL="file:./db/custom.db"' > .env
+The project uses **PostgreSQL** via Prisma. Create a `.env` file with your connection string:
 
-# Push the schema to create the database
+```bash
+# Local PostgreSQL
+echo 'DATABASE_URL="postgresql://user:password@localhost:5432/brightnorth"' > .env
+
+# Or use a hosted PostgreSQL (recommended — works for both local dev & Vercel):
+# echo 'DATABASE_URL="postgresql://user:password@ep-xxx.region.aws.neon.dev/brightnorth?sslmode=require"' > .env
+```
+
+Then create the schema and seed the content:
+
+```bash
+# Push the schema to create all tables
 bun run db:push
 
 # Generate the Prisma client
 bun run db:generate
 
-# Seed the database with content
+# Seed the database with services, industries, testimonials, portfolio, and blog posts
 bun run prisma/seed.ts
 ```
 
@@ -214,7 +224,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the site.
 
 ## Database
 
-The project uses Prisma ORM with SQLite for zero-configuration local development.
+The project uses Prisma ORM with **PostgreSQL**. For local development you can run PostgreSQL directly, or use a free hosted database (Neon, Supabase) that also works when you deploy to Vercel. The schema is defined in `prisma/schema.prisma` with `provider = "postgresql"`.
 
 ### Models
 
@@ -340,38 +350,71 @@ bun run db:reset     # Reset the database (destructive)
 
 ## Environment Variables
 
-Create a `.env` file in the project root:
+Create a `.env` file in the project root for local development, and add the same variables in your Vercel project settings for production.
+
+### Database
 
 ```env
-DATABASE_URL="file:./db/custom.db"
+DATABASE_URL="postgresql://user:password@host:5432/brightnorth?sslmode=require"
 ```
 
-| Variable       | Description                          | Default                     |
-| -------------- | ------------------------------------ | --------------------------- |
-| `DATABASE_URL` | Prisma database connection string   | `file:./db/custom.db`       |
+A hosted PostgreSQL connection string from [Neon](https://neon.tech), [Supabase](https://supabase.com), or Vercel Postgres works for both local dev and production.
 
-> **Note:** The `.env` file is gitignored and not included in the repository. The `z-ai-web-dev-sdk` used by the chatbot reads its credentials from the environment automatically — no additional keys are required.
+### AI Chatbot (Z.ai)
+
+The chatbot (`/api/chat`) uses the `z-ai-web-dev-sdk`. In local development it falls back to a `.z-ai-config` file if present, but **on Vercel you must set these environment variables**:
+
+```env
+ZAI_API_BASE_URL="https://internal-api.z.ai/v1"
+ZAI_API_KEY="your-z-ai-api-key"
+ZAI_TOKEN="your-z-ai-auth-token"
+ZAI_CHAT_ID="your-z-ai-chat-id"
+ZAI_USER_ID="your-z-ai-user-id"
+```
+
+Obtain these by creating an account at [z.ai](https://z.ai) and copying your credentials from the developer dashboard. Only `ZAI_API_BASE_URL` and `ZAI_API_KEY` are strictly required by the code, but all five are sent in every request — set all of them for reliable authentication.
+
+### Summary table
+
+| Variable             | Required | Description                                  |
+| -------------------- | -------- | -------------------------------------------- |
+| `DATABASE_URL`       | ✅ Yes   | PostgreSQL connection string (Prisma)        |
+| `ZAI_API_BASE_URL`   | ✅ Yes   | Z.ai API endpoint (`https://internal-api.z.ai/v1`) |
+| `ZAI_API_KEY`        | ✅ Yes   | Your Z.ai API key                            |
+| `ZAI_TOKEN`          | ✅ Yes   | Your Z.ai auth token (JWT)                   |
+| `ZAI_CHAT_ID`        | Optional | Your Z.ai chat session ID                    |
+| `ZAI_USER_ID`        | Optional | Your Z.ai user ID                            |
+
+> **Note:** The `.env` file is gitignored and never committed. The `.z-ai-config` file (if used locally) is also gitignored.
 
 ## Deployment
 
 ### Vercel (recommended)
 
-1. Push the repository to GitHub
-2. Import the project at [vercel.com/new](https://vercel.com/new)
-3. Add the `DATABASE_URL` environment variable (use a PostgreSQL/MySQL connection string for production)
-4. Update `prisma/schema.prisma` datasource provider if switching from SQLite
-5. Deploy
+1. **Push** the repository to GitHub (already done: [ArmandtJVil/brightnorth-digital](https://github.com/ArmandtJVil/brightnorth-digital))
+2. **Import** the project at [vercel.com/new](https://vercel.com/new)
+3. **Add environment variables** in Vercel → Settings → Environment Variables:
+   - `DATABASE_URL` — your hosted PostgreSQL connection string
+   - `ZAI_API_BASE_URL`, `ZAI_API_KEY`, `ZAI_TOKEN`, `ZAI_CHAT_ID`, `ZAI_USER_ID` — your Z.ai credentials
+4. **Create the database schema & seed it** — run these locally with your production `DATABASE_URL` in `.env`:
+   ```bash
+   bun run db:push          # Creates all tables in PostgreSQL
+   bun run prisma/seed.ts   # Seeds services, industries, testimonials, portfolio, blog posts
+   ```
+5. **Deploy** — Vercel will build and deploy automatically. The blog, testimonials, and all data-driven pages will work once the database is seeded.
+
+> ⚠️ **Important:** SQLite does **not** work on Vercel (the serverless filesystem is read-only). The schema is configured for PostgreSQL — use a hosted PostgreSQL provider like [Neon](https://neon.tech) (free tier recommended).
 
 ### Other platforms
 
-The app is a standard Next.js 16 application and can be deployed to any Node.js-compatible host:
+The app is a standard Next.js 16 application and can be deployed to any Node.js-compatible host with a PostgreSQL database:
 
 ```bash
 bun run build
 bun run start
 ```
 
-For production databases, update the Prisma schema's `datasource` provider to `postgresql` or `mysql` and set the `DATABASE_URL` accordingly.
+Ensure `DATABASE_URL` and the `ZAI_*` variables are set in your hosting provider's environment.
 
 ## Brand Identity
 
