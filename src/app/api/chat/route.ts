@@ -85,10 +85,31 @@ export async function POST(request: Request) {
     const chatId = process.env.ZAI_CHAT_ID;
     const userId = process.env.ZAI_USER_ID;
 
-    const zai =
-      baseUrl && apiKey
-        ? new ZAI({ baseUrl, apiKey, token, chatId, userId })
-        : await ZAI.create();
+    let zai: InstanceType<typeof ZAI>;
+    if (baseUrl && apiKey) {
+      // Production path — env vars set (Vercel)
+      zai = new ZAI({ baseUrl, apiKey, token, chatId, userId });
+    } else {
+      // Local dev path — try the config-file loader
+      try {
+        zai = await ZAI.create();
+      } catch (cfgErr) {
+        const cfgMsg = cfgErr instanceof Error ? cfgErr.message : String(cfgErr);
+        console.error(
+          "[/api/chat] No ZAI env vars set and config file unavailable:",
+          cfgMsg
+        );
+        return NextResponse.json(
+          {
+            success: false,
+            message:
+              "The AI assistant isn't configured. Set ZAI_API_BASE_URL, ZAI_API_KEY, ZAI_TOKEN, ZAI_CHAT_ID, and ZAI_USER_ID in your environment (Vercel → Settings → Environment Variables). See the README for details.",
+            error: cfgMsg,
+          },
+          { status: 503 }
+        );
+      }
+    }
 
     const messages = [
       { role: "assistant" as const, content: SYSTEM_PROMPT },
@@ -109,12 +130,14 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, reply });
   } catch (err) {
-    console.error("[/api/chat] Error:", err);
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[/api/chat] Error:", message);
     return NextResponse.json(
       {
         success: false,
         message:
           "I'm having trouble connecting right now. Please try again in a moment, or reach us at hello@brightnorthdigital.com.",
+        error: message,
       },
       { status: 500 }
     );
