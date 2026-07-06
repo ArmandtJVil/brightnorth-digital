@@ -41,7 +41,7 @@ The site is **dark-mode only** with a distinctive visual identity built on deep 
 | Styling          | Tailwind CSS 4 + [shadcn/ui](https://ui.shadcn.com)   |
 | Database         | Prisma ORM (PostgreSQL — Neon/Vercel Postgres recommended) |
 | Animations       | Framer Motion                                          |
-| AI               | Google Gemini (`@google/generative-ai`) — chatbot     |
+| AI               | Groq (`groq-sdk`, Llama 3.3 70B) — chatbot            |
 | Icons            | Lucide React + custom SVG brand logos                  |
 | Fonts            | Bricolage Grotesque (display) + Hanken Grotesk (body) |
 | Package Manager  | Bun                                                    |
@@ -360,28 +360,28 @@ DATABASE_URL="postgresql://user:password@host:5432/brightnorth?sslmode=require"
 
 A hosted PostgreSQL connection string from [Neon](https://neon.tech), [Supabase](https://supabase.com), or Vercel Postgres works for both local dev and production.
 
-### AI Chatbot (Google Gemini)
+### AI Chatbot (Groq)
 
-The chatbot (`/api/chat`) uses Google Gemini via the `@google/generative-ai` SDK with the `gemini-1.5-flash` model. It requires a single environment variable:
+The chatbot (`/api/chat`) uses [Groq](https://groq.com) via the `groq-sdk` with the Llama 3.3 70B model for ultra-fast inference. It requires a single environment variable:
 
 ```env
-GEMINI_API_KEY="your-gemini-api-key"
+GROQ_API_KEY="your-groq-api-key"
 ```
 
 **Get a free API key:**
-1. Go to [Google AI Studio](https://aistudio.google.com/apikey)
-2. Sign in with a Google account
-3. Click **"Create API key"**
-4. Copy the key and add it as `GEMINI_API_KEY` in your `.env` (local) and in Vercel → Settings → Environment Variables (production)
+1. Go to [Groq Console](https://console.groq.com/keys)
+2. Sign in with a Google or GitHub account
+3. Click **"Create API Key"**
+4. Copy the key and add it as `GROQ_API_KEY` in your `.env` (local) and in Vercel → Settings → Environment Variables (production)
 
-The free tier includes generous usage (15 requests/minute, 1,500/day) which is plenty for a website chatbot.
+Groq offers a generous free tier (30 requests/minute, 14,400/day) with no billing setup required — plenty for a website chatbot, and extremely fast (Llama 3.3 on Groq hardware).
 
 ### Summary table
 
 | Variable          | Required | Description                                  |
 | ----------------- | -------- | -------------------------------------------- |
 | `DATABASE_URL`    | ✅ Yes   | PostgreSQL connection string (Prisma)        |
-| `GEMINI_API_KEY`  | ✅ Yes   | Google Gemini API key (free at aistudio.google.com) |
+| `GROQ_API_KEY`   | ✅ Yes   | Groq API key (free at console.groq.com/keys) |
 
 > **Note:** The `.env` file is gitignored and never committed.
 
@@ -393,7 +393,7 @@ The free tier includes generous usage (15 requests/minute, 1,500/day) which is p
 2. **Import** the project at [vercel.com/new](https://vercel.com/new)
 3. **Add environment variables** in Vercel → Settings → Environment Variables:
    - `DATABASE_URL` — your hosted PostgreSQL connection string
-   - `GEMINI_API_KEY` — your free Google Gemini API key (from [aistudio.google.com/apikey](https://aistudio.google.com/apikey))
+   - `GROQ_API_KEY` — your free Groq API key (from [console.groq.com/keys](https://console.groq.com/keys))
 4. **Create the database schema & seed it** — run these locally with your production `DATABASE_URL` in `.env`:
    ```bash
    bun run db:push          # Creates all tables in PostgreSQL
@@ -412,7 +412,7 @@ bun run build
 bun run start
 ```
 
-Ensure `DATABASE_URL` and `GEMINI_API_KEY` are set in your hosting provider's environment.
+Ensure `DATABASE_URL` and `GROQ_API_KEY` are set in your hosting provider's environment.
 
 ## Brand Identity
 

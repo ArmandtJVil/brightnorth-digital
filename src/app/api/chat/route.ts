@@ -1,16 +1,13 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import Groq from "groq-sdk";
 
 /**
  * AI Chatbot endpoint for BrightNorth Digital.
  *
- * Uses Google Gemini (via @google/generative-ai) to power a conversational
- * assistant that helps website visitors with questions about services,
- * pricing, process, and how to get started.
- *
- * Requires GEMINI_API_KEY environment variable (get one free at
- * https://aistudio.google.com/apikey).
+ * Uses Groq (via groq-sdk) for ultra-fast LLM inference with the
+ * Llama 3.3 70B model. Groq offers a generous free tier with no
+ * billing complications — get a key at https://console.groq.com/keys.
  *
  * Conversation history is sent from the client and replayed here so the
  * model maintains context within a session.
@@ -58,6 +55,8 @@ const ChatSchema = z.object({
   messages: z.array(MessageSchema).min(1).max(20),
 });
 
+const MODEL = "llama-3.3-70b-versatile";
+
 export async function POST(request: Request) {
   let body: unknown;
   try {
@@ -78,50 +77,50 @@ export async function POST(request: Request) {
     );
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
 
   if (!apiKey) {
     console.error(
-      "[/api/chat] Missing GEMINI_API_KEY environment variable. " +
-        "Get a free key at https://aistudio.google.com/apikey and add it in " +
+      "[/api/chat] Missing GROQ_API_KEY environment variable. " +
+        "Get a free key at https://console.groq.com/keys and add it in " +
         "Vercel → Settings → Environment Variables."
     );
     return NextResponse.json(
       {
         success: false,
         message:
-          "The AI assistant isn't configured yet. Please set the GEMINI_API_KEY environment variable (get a free key at https://aistudio.google.com/apikey).",
+          "The AI assistant isn't configured yet. Please set the GROQ_API_KEY environment variable (get a free key at https://console.groq.com/keys).",
       },
       { status: 503 }
     );
   }
 
   try {
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
-      systemInstruction: SYSTEM_PROMPT,
+    const groq = new Groq({ apiKey });
+
+    const messages = [
+      { role: "system" as const, content: SYSTEM_PROMPT },
+      ...parsed.data.messages.map((m) => ({
+        role: m.role as "user" | "assistant",
+        content: m.content,
+      })),
+    ];
+
+    const completion = await groq.chat.completions.create({
+      model: MODEL,
+      messages,
+      temperature: 0.7,
+      max_tokens: 600,
     });
 
-    // Convert the chat history into Gemini's expected format.
-    // Gemini expects alternating user/model turns; the first turn must be a user.
-    const history = parsed.data.messages.slice(0, -1).map((m) => ({
-      role: m.role === "user" ? "user" : "model",
-      parts: [{ text: m.content }],
-    }));
-
-    const lastMessage = parsed.data.messages[parsed.data.messages.length - 1];
-
-    const chat = model.startChat({ history });
-    const result = await chat.sendMessage(lastMessage.content);
     const reply =
-      result.response.text()?.trim() ||
+      completion.choices?.[0]?.message?.content?.trim() ||
       "I'm sorry, I couldn't generate a response just now. Could you rephrase that, or feel free to contact our team directly at hello@brightnorthdigital.com.";
 
     return NextResponse.json({ success: true, reply });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    console.error("[/api/chat] Gemini error:", message);
+    console.error("[/api/chat] Groq error:", message);
     return NextResponse.json(
       {
         success: false,
